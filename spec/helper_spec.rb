@@ -7,7 +7,7 @@ describe 'webpack_asset_paths' do
   include Webpack::Rails::Helper
 
   before do
-    expect(Webpack::Rails::Manifest).to receive(:asset_paths).with(source).and_return(asset_paths)
+    expect(Webpack::Rails::Manifest).to receive(:asset_paths).with(source, nil).and_return(asset_paths)
   end
 
   it "should return paths straight from te manifest if the dev server is disabled" do

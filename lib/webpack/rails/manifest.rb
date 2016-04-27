@@ -18,12 +18,14 @@ module Webpack
 
       class << self
         # :nodoc:
-        def asset_paths(source)
+        def asset_paths(source, filetype = nil)
           paths = manifest["assetsByChunkName"][source]
           if paths
             # Can be either a string or an array of strings.
             # Do not include source maps as they are not javascript
-            [paths].flatten.reject { |p| p =~ /.*\.map$/ }.map do |p|
+            [paths].flatten.reject { |p| p =~ /.*\.map$/ }.reject do |p|
+              !p.match(/#{filetype}$/) if filetype
+            end.map do |p|
               "/#{::Rails.configuration.webpack.public_path}/#{p}"
             end
           else

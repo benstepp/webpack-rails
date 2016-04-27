@@ -6,7 +6,7 @@ describe "Webpack::Rails::Manifest" do
     <<-EOF
       {
         "assetsByChunkName": {
-          "entry1": [ "entry1.js", "entry1-a.js" ],
+          "entry1": [ "entry1.js", "entry1-a.js", "entry1.css" ],
           "entry2": "entry2.js"
         }
       }
@@ -19,11 +19,16 @@ describe "Webpack::Rails::Manifest" do
     end
 
     it "should return multiple entry asset paths from the manifest" do
-      expect(Webpack::Rails::Manifest.asset_paths("entry1")).to eq(["/public_path/entry1.js", "/public_path/entry1-a.js"])
+      expect(Webpack::Rails::Manifest.asset_paths("entry1")).to eq(["/public_path/entry1.js", "/public_path/entry1-a.js", "/public_path/entry1.css"])
     end
 
     it "should error on a missing entry point" do
       expect { Webpack::Rails::Manifest.asset_paths("herp") }.to raise_error(Webpack::Rails::Manifest::EntryPointMissingError)
+    end
+
+    it 'can accept a filetype extension' do
+      assets = Webpack::Rails::Manifest.asset_paths('entry1', 'css')
+      expect(assets).to eq(['/public_path/entry1.css'])
     end
   end
 
