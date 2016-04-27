@@ -4,6 +4,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var StatsPlugin = require('stats-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // must match config.webpack.dev_server.port
 var devServerPort = 3808;
@@ -55,7 +56,10 @@ if (production) {
       'process.env': { NODE_ENV: JSON.stringify('production') }
     }),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new ExtractTextPlugin('[name]-[contenthash].css' , {
+      allChunks: true
+    })
   );
 } else {
   config.devServer = {
